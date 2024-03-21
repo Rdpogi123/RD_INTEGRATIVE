@@ -1,0 +1,59 @@
+import pyttsx3
+import speech_recognition as sr
+import pyjokes
+import wikipedia
+
+# Initialize text-to-speech engine
+engine = pyttsx3.init()
+engine.setProperty('rate', 150)  # Adjust speech rate
+
+def talk(text):
+    engine.say(text)
+    engine.runAndWait()
+
+def take_command():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+    try:
+        print("Processing...")
+        command = recognizer.recognize_google(audio).lower()
+        print("You said:", command)
+        if "RD" in command:
+            command = command.replace('JOY', '')
+            print(command)
+        if 'name' in command:
+            talk("My name is RD version")
+        if 'joke' in command:
+            talk("Here is my joke")
+            print(pyjokes.get_joke())
+            talk(pyjokes.get_joke())
+            talk(command)
+        if 'watermelon' in command:
+            talk("Here is a Watermelon that is round or oval shape has an Green and Black stripes color")
+            print("Here is a Watermelon that is round or oval shape has an Green and Black stripes color")
+        if 'Snake' in command:
+            talk("Here is a Snake, two types of snakes, 1 that wiggles on the ground and 1 that walks on 2 feet")
+            print("Here is a Snake, two types of snakes, 1 that wiggles on the ground and 1 that walks on 2 feet")
+        if 'Gender' in command:
+            talk("Sex is usually categorized as female or male but there is variation in the biological attributes that comprise sex and how those attributes are expressed. Gender refers to the socially constructed roles, behaviours, expressions and identities of girls, women, boys, men, and gender diverse people")
+            print("Sex is usually categorized as female or male but there is variation in the biological attributes that comprise sex and how those attributes are expressed. Gender refers to the socially constructed roles, behaviours, expressions and identities of girls, women, boys, men, and gender diverse people")
+        if 'search' in command:
+            command = command.replace('search', '')
+            print(command)
+            print(wikipedia.summary(command, sentences=1))
+        else:
+            talk("Please Say Something")
+    except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio")
+    except sr.RequestError as e:
+        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+    except Exception as e:
+        print("Error: {0}".format(e))
+    except:
+        command = "No Mic"
+    print("Listening finished.")
+
+take_command()
